@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-}
+    ViewBag.Title = "Trang chủ";
+  }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<main class="home-content">
+    <section class="featured-news">
+        <span class="category-label">Tin nổi bật</span>
+        <h1>Khám phá công nghệ mới nhất trong năm 2025</h1>
+        <p>Những tiến bộ đột phá trong lĩnh vực AI và công nghệ xanh đang thay đổi cách chúng ta sống và làm việc...</p>
+        <div class="news-meta">
+            <span>5 phút trước</span> | <span>Tác giả: Nguyễn Văn A</span>
+        </div>
+    </section>
+
+    <section class="latest-news">
+        <h2>Tin tức mới nhất</h2>
+        <div class="news-grid">
+            <article class="news-card">
+                <img src="https://source.unsplash.com/random/800x600?technology" alt="Tin công nghệ">
+                <div class="news-content">
+                    <span class="category-label">Công nghệ</span>
+                    <h3>Smartphone màn hình gập thế hệ mới</h3>
+                    <p>Các nhà sản xuất điện thoại lớn đang chuẩn bị ra mắt những mẫu điện thoại màn hình gập...</p>
+                    <div class="news-meta">2 giờ trước</div>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <img src="https://source.unsplash.com/random/800x600?business" alt="Tin kinh doanh">
+                <div class="news-content">
+                    <span class="category-label">Kinh doanh</span>
+                    <h3>Thị trường chứng khoán tăng mạnh</h3>
+                    <p>Chỉ số VN-Index tăng điểm ấn tượng trong phiên giao dịch hôm nay...</p>
+                    <div class="news-meta">3 giờ trước</div>
+                </div>
+            </article>
+
+            <article class="news-card">
+                <img src="https://source.unsplash.com/random/800x600?sports" alt="Tin thể thao">
+                <div class="news-content">
+                    <span class="category-label">Thể thao</span>
+                    <h3>Đội tuyển Việt Nam chuẩn bị cho giải đấu mới</h3>
+                    <p>HLV Park Hang-seo công bố danh sách sơ bộ các cầu thủ...</p>
+                    <div class="news-meta">4 giờ trước</div>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
