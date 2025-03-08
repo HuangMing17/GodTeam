@@ -18,7 +18,6 @@ namespace GodTeam.Models
         public Category ParentCategory { get; set; }
         public ICollection<Category> SubCategories { get; set; }
 
-        // Many-to-many relationship with Post through PostCategory
-        public ICollection<PostCategory> PostCategories { get; set; }
+        public ICollection<Post> Posts { get; set; }
     }
 }

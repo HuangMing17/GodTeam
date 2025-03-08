@@ -62,67 +62,48 @@ namespace GodTeam.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-            ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Users = _context.Users.ToList();
             return View();
         }
 
         // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Content,UserId,Id,PublishedDate")] Post post, int[] selectedCategories)
+        public async Task<IActionResult> Create([Bind("Title,Content,UserId")] Post post, int[] selectedCategories)
         {
-            // Check if Author is selected
-            if (post.UserId == 0)
-            {
-                ModelState.AddModelError("UserId", "Vui lòng chọn tác giả");
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
-            }
-
             try
             {
-                // Initialize PostCategories collection
-                post.PostCategories = new List<PostCategory>();
-                post.PublishedDate = DateTime.Now;
-
-                // Add post first
-                _context.Posts.Add(post);
-                await _context.SaveChangesAsync();
-
-                // Add categories
-                if (selectedCategories != null && selectedCategories.Length > 0)
+                if (ModelState.IsValid)
                 {
-                    foreach (var categoryId in selectedCategories)
-                    {
-                        var postCategory = new PostCategory
-                        {
-                            PostId = post.Id,
-                            CategoryId = categoryId
-                        };
-                        post.PostCategories.Add(postCategory);
-                    }
+                    post.PublishedDate = DateTime.Now;
+                    _context.Add(post);
                     await _context.SaveChangesAsync();
-                }
 
-                TempData["Message"] = "Bài viết đã được tạo thành công.";
-                return RedirectToAction(nameof(Index));
+                    if (selectedCategories != null && selectedCategories.Length > 0)
+                    {
+                        foreach (var categoryId in selectedCategories)
+                        {
+                            _context.PostCategories.Add(new PostCategory
+                            {
+                                PostId = post.Id,
+                                CategoryId = categoryId
+                            });
+                        }
+                        await _context.SaveChangesAsync();
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Có lỗi xảy ra khi tạo bài viết: " + ex.Message);
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
             }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Users = _context.Users.ToList();
+            return View(post);
         }
 
         // GET: Posts/Edit/5
@@ -142,8 +123,8 @@ namespace GodTeam.Controllers
                 return NotFound();
             }
 
-            ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-            ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Users = _context.Users.ToList();
             ViewBag.SelectedCategories = post.PostCategories.Select(pc => pc.CategoryId).ToArray();
             return View(post);
         }
@@ -151,71 +132,59 @@ namespace GodTeam.Controllers
         // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,UserId,PublishedDate")] Post post, int[] selectedCategories)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,UserId")] Post post, int[] selectedCategories)
         {
             if (id != post.Id)
             {
                 return NotFound();
             }
 
-            // Check if Author is selected
-            if (post.UserId == 0)
-            {
-                ModelState.AddModelError("UserId", "Vui lòng chọn tác giả");
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
-            }
-
             try
             {
-                var existingPost = await _context.Posts
-                    .Include(p => p.PostCategories)
-                    .FirstOrDefaultAsync(p => p.Id == id);
-
-                if (existingPost == null)
+                if (ModelState.IsValid)
                 {
-                    return NotFound();
-                }
+                    var existingPost = await _context.Posts
+                        .Include(p => p.PostCategories)
+                        .FirstOrDefaultAsync(p => p.Id == id);
 
-                existingPost.Title = post.Title;
-                existingPost.Content = post.Content;
-                existingPost.UserId = post.UserId;
-
-                // Remove existing categories
-                _context.PostCategories.RemoveRange(existingPost.PostCategories);
-
-                // Add selected categories
-                if (selectedCategories != null && selectedCategories.Length > 0)
-                {
-                    foreach (var categoryId in selectedCategories)
+                    if (existingPost == null)
                     {
-                        _context.PostCategories.Add(new PostCategory
-                        {
-                            PostId = post.Id,
-                            CategoryId = categoryId
-                        });
+                        return NotFound();
                     }
-                }
 
-                await _context.SaveChangesAsync();
-                TempData["Message"] = "Bài viết đã được cập nhật thành công.";
-                return RedirectToAction(nameof(Index));
+                    existingPost.Title = post.Title;
+                    existingPost.Content = post.Content;
+                    existingPost.UserId = post.UserId;
+
+                    // Remove existing categories
+                    _context.PostCategories.RemoveRange(existingPost.PostCategories);
+
+                    // Add selected categories
+                    if (selectedCategories != null && selectedCategories.Length > 0)
+                    {
+                        foreach (var categoryId in selectedCategories)
+                        {
+                            _context.PostCategories.Add(new PostCategory
+                            {
+                                PostId = post.Id,
+                                CategoryId = categoryId
+                            });
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Có lỗi xảy ra khi cập nhật bài viết: " + ex.Message);
-                ViewBag.Categories = _context.Categories.OrderBy(c => c.Name).ToList();
-                ViewBag.Users = _context.Users.OrderBy(u => u.Username).ToList();
-                return View(post);
             }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Users = _context.Users.ToList();
+            ViewBag.SelectedCategories = selectedCategories;
+            return View(post);
         }
 
         // GET: Posts/Delete/5
@@ -254,7 +223,6 @@ namespace GodTeam.Controllers
                 _context.PostCategories.RemoveRange(post.PostCategories);
                 _context.Posts.Remove(post);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = "Bài viết đã được xóa thành công.";
             }
             return RedirectToAction(nameof(Index));
         }

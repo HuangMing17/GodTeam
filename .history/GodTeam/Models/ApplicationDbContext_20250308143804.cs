@@ -39,8 +39,7 @@ namespace GodTeam.Models
                 new Category { Id = 5, Name = "Khoa học", Description = "Tin tức khoa học" }
             );
 
-            // Seed sample authors with a static date
-            var createdDate = new DateTime(2025, 3, 8);
+            // Seed sample authors
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -49,7 +48,7 @@ namespace GodTeam.Models
                     Email = "admin@example.com",
                     PasswordHash = "admin123",
                     Role = "Admin",
-                    CreatedAt = createdDate
+                    CreatedAt = DateTime.Now
                 },
                 new User
                 {
@@ -58,7 +57,7 @@ namespace GodTeam.Models
                     Email = "nguyenvana@example.com",
                     PasswordHash = "user123",
                     Role = "Author",
-                    CreatedAt = createdDate
+                    CreatedAt = DateTime.Now
                 },
                 new User
                 {
@@ -67,7 +66,7 @@ namespace GodTeam.Models
                     Email = "tranthib@example.com",
                     PasswordHash = "user123",
                     Role = "Author",
-                    CreatedAt = createdDate
+                    CreatedAt = DateTime.Now
                 },
                 new User
                 {
@@ -76,7 +75,7 @@ namespace GodTeam.Models
                     Email = "leminhc@example.com",
                     PasswordHash = "user123",
                     Role = "Author",
-                    CreatedAt = createdDate
+                    CreatedAt = DateTime.Now
                 },
                 new User
                 {
@@ -85,7 +84,7 @@ namespace GodTeam.Models
                     Email = "phamthid@example.com",
                     PasswordHash = "user123",
                     Role = "Author",
-                    CreatedAt = createdDate
+                    CreatedAt = DateTime.Now
                 }
             );
         }

@@ -1,0 +1,28 @@
+@model IEnumerable<GodTeam.Models.Category>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <i class="bi bi-grid"></i> Thể loại
+    </a>
+    <ul class="dropdown-menu dropdown-menu-dark">
+        <li>
+            <a class="dropdown-item @(Context.Request.Query["categoryId"].Count == 0 ? "active" : "")"
+                asp-controller="Posts" asp-action="Index">
+                Tất cả thể loại
+            </a>
+        </li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        @foreach (var category in Model)
+        {
+            <li>
+                <a class="dropdown-item @(Context.Request.Query["categoryId"].ToString() == category.Id.ToString() ? "active" : "")"
+                    asp-controller="Posts" asp-action="Index" asp-route-categoryId="@category.Id">
+                    @category.Name
+                </a>
+            </li>
+        }
+    </ul>
+</li>

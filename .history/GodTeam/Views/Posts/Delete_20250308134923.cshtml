@@ -19,17 +19,7 @@
                 <dd class="col-sm-10">@Model.Title</dd>
 
                 <dt class="col-sm-2">Thể loại</dt>
-                <dd class="col-sm-10">
-                    @if (Model.PostCategories != null && Model.PostCategories.Any())
-                    {
-                        <div class="d-flex flex-wrap gap-1">
-                            @foreach (var pc in Model.PostCategories)
-                            {
-                                <span class="badge bg-secondary">@pc.Category?.Name</span>
-                            }
-                        </div>
-                    }
-                </dd>
+                <dd class="col-sm-10">@Model.Category?.Name</dd>
 
                 <dt class="col-sm-2">Tác giả</dt>
                 <dd class="col-sm-10">@Model.Author?.Username</dd>

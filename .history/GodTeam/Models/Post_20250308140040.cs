@@ -5,11 +5,6 @@ namespace GodTeam.Models
 {
     public class Post
     {
-        public Post()
-        {
-            PostCategories = new List<PostCategory>();
-        }
-
         [Key]
         public int Id { get; set; }
 

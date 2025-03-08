@@ -7,19 +7,9 @@
 <div class="container mt-4">
     <h1>@ViewData["Title"]</h1>
 
-    @if (TempData["Message"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["Message"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
     <div class="row mb-4">
         <div class="col-md-6">
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Tạo bài viết mới
-            </a>
+            <a asp-action="Create" class="btn btn-primary">Tạo bài viết mới</a>
         </div>
         <div class="col-md-6">
             <form asp-action="Index" method="get" class="form-inline justify-content-end">
@@ -58,7 +48,7 @@
                             @if (item.PostCategories != null && item.PostCategories.Any())
                             {
                                 <div class="d-flex flex-wrap gap-1">
-                                    @foreach (var pc in item.PostCategories.OrderBy(pc => pc.Category.Name))
+                                    @foreach (var pc in item.PostCategories)
                                     {
                                         <span class="badge bg-secondary">@pc.Category?.Name</span>
                                     }
@@ -90,13 +80,6 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Auto-hide alert after 5 seconds
-            window.setTimeout(function () {
-                $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                    $(this).remove();
-                });
-            }, 5000);
-
             // Add Bootstrap Icons if not already included
             if (!$('link[href*="bootstrap-icons"]').length) {
                 $('head').append('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">');

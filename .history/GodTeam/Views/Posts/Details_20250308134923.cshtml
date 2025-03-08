@@ -12,15 +12,7 @@
             <h2 class="card-title mb-4">@Model.Title</h2>
 
             <div class="mb-3">
-                @if (Model.PostCategories != null && Model.PostCategories.Any())
-                {
-                    <div class="mb-2">
-                        @foreach (var pc in Model.PostCategories)
-                        {
-                            <span class="badge bg-primary me-1">@pc.Category?.Name</span>
-                        }
-                    </div>
-                }
+                <span class="badge bg-primary me-2">@Model.Category?.Name</span>
                 <small class="text-muted">
                     Đăng bởi @Model.Author?.Username vào @Model.PublishedDate.ToString("dd/MM/yyyy HH:mm")
                 </small>

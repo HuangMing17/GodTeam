@@ -1,0 +1,17 @@
+@model IEnumerable<GodTeam.Models.Category>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+        Thể loại
+    </a>
+    <ul class="dropdown-menu">
+        @foreach (var category in Model)
+        {
+                <li>
+                    <a class="dropdown-item" asp-controller="Posts" asp-action="Index" asp-route-categoryId="@category.Id">
+                        @category.Name
+                    </a>
+                </li>
+        }
+    </ul>
+</li>

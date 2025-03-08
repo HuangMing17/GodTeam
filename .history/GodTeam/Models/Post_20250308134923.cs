@@ -5,11 +5,6 @@ namespace GodTeam.Models
 {
     public class Post
     {
-        public Post()
-        {
-            PostCategories = new List<PostCategory>();
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -22,8 +17,10 @@ namespace GodTeam.Models
 
         public DateTime PublishedDate { get; set; }
 
-        // Many-to-many relationship with Category through PostCategory
-        public ICollection<PostCategory> PostCategories { get; set; }
+        // Khóa ngoại đến bảng Category
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
 
         // Khóa ngoại đến bảng User
         public int UserId { get; set; }
